@@ -1,0 +1,32 @@
+Mongo db=
+
+1.Support NoSql(Not only sql)
+2.structured and non structured data
+3.stores the relative data
+4.support BSON fromat(Binary Json)
+
+Non fixed Schema comapre to Mysql
+
+two conceptsm involved{
+    shrading = to retrive the data if the data base is too larger (if 1000 data to retrive the 871 it searches between 800 and 900) only  
+    replication = store the copy of the data base (fault tolerance like that)
+}
+
+in mysql = one row =row 
+multiuple row=table
+
+in NoSql
+one data=Documeny
+multiple documnet =collection
+
+firsbase=NoSql
+
+disadvan=require larger memory because it does not suppose redundancy 
+
+store like object in object user{
+    data{
+
+    }
+}
+
+more comapines prefer Nosql because it support non fixed schema and un-structered data 

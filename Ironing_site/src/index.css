@@ -1,0 +1,282 @@
+
+
+body{
+  
+overflow-x: hidden;
+margin: 0;
+/* background-color:lightgoldenrodyellow; */
+}
+
+
+
+
+.saa{
+  padding: 5px;
+  border:black solid 2px;
+  border-radius: 50px;
+  transition: 0.3s;
+
+}
+.saa:hover{
+  transform: scale(1.05);
+  background-color: #ffff8A;
+  box-shadow: 0 15px 30px rgb(0,0,0,black);
+}
+
+.nav-link:hover {
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #ff9800;
+  color: white ;
+  transform: scale(1.08);
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+}
+
+.hero-section{
+  
+   background-color:#f4e8c1;  
+  
+   
+}
+.pro_image{
+  height: 200px;
+  width: 400px;
+}
+.hero-section img{
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+
+  transition: 0.3s;
+}
+
+.hero-section img:hover{
+  transform: scale(1.05);
+}
+
+/* .hero-section.hover{
+   
+   transform: scale(0.95);
+
+} */
+.card{
+  border-radius: 30px;
+}
+
+
+.service-img{
+  height: 250px;
+  object-fit: cover;
+}
+ .sss{
+  transition: 0.3s;
+}
+.sss:hover{
+  transform: scale(1.04);
+  background-color: #ffff8A;
+  box-shadow: 0 15px 10px rgba(0,0,0,0.15);
+
+
+} 
+
+html{
+  scroll-behavior: smooth;
+}
+
+.ima{
+  display: flex;
+  justify-content: center;
+}
+.ss{
+  height: 200px;
+  
+  object-fit: cover;
+  border-radius: 10px;
+
+}
+
+.but{
+  transition: 0.3s;
+}
+.but:hover{
+transform: scale(0.90);
+background-color: #ffff8A;
+color: black;
+box-shadow: 0 15px 31px rgb(0,0,0,black);
+}
+
+.rotate{
+  transition: 0.3s;
+}
+
+.rotate:hover{
+  transform: rotate(10deg);
+
+}
+.cc{
+  background-color:#ffff8A;
+  height:500px ;
+  width: 280px;
+}
+.ccc{
+   background-color: #ffff8A;
+  height: 100px;
+  width: 830px;
+}
+
+.s{
+  padding:1px;
+  transition:0.3s;
+}
+
+.s:hover{
+  border-left:10px solid black;
+  padding-left:20px;
+  background:#fff;
+} 
+
+
+.he{
+  padding: 6px;
+
+  transition: 0.4s;
+
+}
+.he:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+  background-color: black;
+  color: white;
+  border-radius: 8px;
+
+}
+.quantity{
+  transition: 0.3s;
+}
+.quantity:hover{
+  cursor: pointer;
+transform: scale(1.1);
+background-color: #ff9900;
+box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.he1{
+  
+padding: 6px;
+background-color: black;
+color: white;
+border-radius: 10px;
+}
+.head{
+
+
+
+    font-size: 32px;
+    font-weight: bold;
+
+
+
+}
+ 
+.ee{
+background-color:#f8f9fa;
+}
+
+.addres{
+justify-content: center;
+ align-items: center;
+  background-color: #ffff8A;
+  height: 900px;
+  width: 450px;
+  border-radius: 30px;
+}
+
+/* .container{
+  max-width: 1200px;
+  margin: auto;
+}
+@media(max-width:768px){
+  .container{
+    width: 100%;
+  }
+} */
+
+.booking{
+  height: 980px;
+  width: 800px;
+
+
+    background-color: #ffff8A;
+padding: 1rem;
+  border-radius: 30px;
+
+
+}
+
+
+.servic {
+  
+  border: 2px solid black;
+    border-radius: 30px;
+      padding: 20px;
+      transition: 0.3s ease;
+    
+      
+    }
+    .servic:hover{
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+    .input-notes{
+      border: darkgoldenrod  solid 2px ;
+      border-radius: 20px;
+
+     width: 400px;
+  
+      padding: 50px;
+    }
+
+    .input-dt{
+border: lightblue solid 4px;
+border-radius: 15px;
+  transition: 0.3s ease;
+    }
+ .input-dt:hover{
+  cursor: pointer;
+
+ }
+
+    .text-input{
+      border: lightblue  solid 2px ;
+transition: 0.3s;
+    }
+    .text-input:hover{
+transform: scale(1.05);
+background-color: lightblue;
+box-shadow: 0 15px 30px rgb(0,0,0,black);
+    }
+
+    
+
+
+    .image{
+      height: 100px;
+      width: 100px;
+    }
+
+    .profiles{
+      background-color: #ffff8A;
+      border-radius: 40px;
+    }
+   
+    
+  .defa:hover{
+    color: blue;
+
+  }  
+
+  .map:hover{
+color: blue;
+cursor: pointer;
+  }
