@@ -27,6 +27,7 @@ It includes a dynamic frontend built with React and a powerful backend using Nod
 * HTML5
 * CSS3
 * JavaScript (ES6+)
+* Bootstarp
 
 ### ⚙️ Backend
 
