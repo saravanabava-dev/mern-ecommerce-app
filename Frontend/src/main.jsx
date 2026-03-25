@@ -21,6 +21,7 @@ import Pickup from './Pickup.jsx'
 import AddReveal from './AddReveal.jsx'
 import Location from './Location.jsx'
 import Listing_details from './Listing_details.jsx'
+import Delivery from './Delivery.jsx'
 import Address_delivery from './Address_delivery.jsx'
 
 const obj=createBrowserRouter([
@@ -99,7 +100,7 @@ element:<Price4/>
 },
 {
   path:'/delivery',
-  element:<Address_delivery/>
+  element:<Delivery/>
 }
   
 ])

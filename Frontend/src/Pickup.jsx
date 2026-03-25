@@ -21,6 +21,7 @@ function Pickup() {
     const navigate=useNavigate();
 const location=useLocation();
 
+const price_details=location.state?.price_details||[0,0,0,0];
 const data=location.state?.address;
 const dates=location.state?.dates;
 
@@ -73,29 +74,42 @@ const pincode=datas[4];
 
 
       if(!pickup_date ){
-        return toast.error("Pickup Date Should not be Empty")
+        toast.error("Pickup Date Should not be Empty")
+        return false;
       }
       if(!pickup_time ){
-        return toast.error("Pickup Time Should not be Empty")
+        toast.error("Pickup Time Should not be Empty")
+        return false;
       }
       if(!deliver_time ){
-        return toast.error("Deliver Time Should not be Empty")
+         toast.error("Deliver Time Should not be Empty")
+         return false;
       }
       if(!delivery_date){
-        return toast.error("Deliver Date Should not be Empty")
+         toast.error("Deliver Date Should not be Empty")
+         return false;
       }
       
+      if(!district && !dis2){
+ toast.error("Deliver Address Required")
+ return false;
+      }
       
         const pickup_details=new Date(`${pickup_date}T${pickup_time}`)
          const delivery_details=new Date(`${delivery_date}T${deliver_time}`)
 
 if(pickup_details>delivery_details){
-  return toast.error("Delivery Details must be after pickup ")
+ toast.error("Delivery Details must be after pickup ")
+ return false;
 }
      const res= await axios.post(`http://localhost:5174/api/pickup`,{UserId:user._id,pickup_date,pickup_time,delivery_date,deliver_time,notes})
         toast.success(res.data.msg);
+        return true;
 
     }
+
+
+    
   return (
     <div>
       <ToastContainer position='top-right' autoClose={3000} />
@@ -271,7 +285,14 @@ pickup_date,pickup_time,deliver_time,delivery_date
   )} */}
 </div>
 <div>
-    <button className='btn btn-warning rounded-pill but' onClick={()=>{handler;navigate('/delivery')}}>Proceed</button>
+    <button className='btn btn-warning rounded-pill but' onClick={async()=>{ const res=await handler();
+      if(res){navigate('/delivery',{
+        state:{
+          saved_address:`${district}-${pincode}`,
+current_address:`${dis2}-${pin2}`,
+price_details
+        }
+      })}}}>Proceed</button>
 </div>
  </div>
   

@@ -5,7 +5,7 @@ function Address_delivery() {
     <div>
 <h1>
 
-Delivery page
+
 </h1>
     </div>
   )

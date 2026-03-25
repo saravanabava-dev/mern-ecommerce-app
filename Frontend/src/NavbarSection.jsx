@@ -30,7 +30,7 @@ JSON.parse(localStorage.getItem("user"))
 const timer= setTimeout(()=>{
  localStorage.removeItem("user")
   setUser(null)
-},600000)
+},60000)
  return ()=>clearTimeout(timer)
   },[])
 
