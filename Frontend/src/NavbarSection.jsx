@@ -48,7 +48,7 @@ const timer= setTimeout(()=>{
       <div className="ms-auto">
         <a className="me-4 nav-link d-inline" href="/">Home</a>
         <a className="nav-link me-4 d-inline " href="/ser" >Services</a>
-        <a className="me-4 nav-link d-inline" href="/about">About</a>
+        <a className="me-4 nav-link d-inline" href="/abouts">About us</a>
  {user?(
 <div ref={dropdownRef} style={{ position: "relative", display: "inline-block" }}>
 

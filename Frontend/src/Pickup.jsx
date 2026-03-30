@@ -108,7 +108,12 @@ if(pickup_details>delivery_details){
 
     }
 
-
+if(dis2){
+  localStorage.setItem("address",JSON.stringify(geo_loca))
+}
+if(district){
+  localStorage.setItem("address",JSON.stringify(datas));
+}
     
   return (
     <div>
@@ -285,11 +290,15 @@ pickup_date,pickup_time,deliver_time,delivery_date
   )} */}
 </div>
 <div>
+  
     <button className='btn btn-warning rounded-pill but' onClick={async()=>{ const res=await handler();
       if(res){navigate('/delivery',{
         state:{
-          saved_address:`${district}-${pincode}`,
-current_address:`${dis2}-${pin2}`,
+          saved_address:district?`${district}-${pincode}`:null,
+current_address:dis2?`${dis2}-${pin2}`:null,
+data_details:{
+  pickup_date,pickup_time,deliver_time,delivery_date
+},
 price_details
         }
       })}}}>Proceed</button>

@@ -1,21 +1,29 @@
-
 import React from 'react'
-import { useRef,useState,useEffect } from 'react';
-import { useNavigate,Link } from 'react-router-dom';
+
+
+
+ import  { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { toast, ToastContainer } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
-import { ToastContainer,toast } from 'react-toastify';
 
+function Reviewpage() {
 
-function Delivery() {
-
-  const location =useLocation();
-
-  const [showModal, setShowModal] = useState(false);
- 
-  const saved_add=location.state?.saved_address ;
-
-  const current_add=location.state?.current_address ;
   const dropdownRef=useRef();
+  const location=useLocation();
+  
+
+
+
+  const Offer =location.state?.offer|| location.state?.Offer || 0
+  
+  
+ //SON.parse(localStorage.getItem("offer")) || 0;
+
+
+  const  TotalAmount=location.state?.baseAmount || location.state?.TotalAmount || 0
+  //ON.parse(localStorage.getItem("totalAmount"))|| 0;
   useEffect(() => {
   function handleClickOutside(e) {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -38,83 +46,83 @@ JSON.parse(localStorage.getItem("user"))
 const timer= setTimeout(()=>{
  localStorage.removeItem("user")
   setUser(null)
-},600000)
+},60000)
  return ()=>clearTimeout(timer)
   },[])
- const [offer,setOffer]=useState(0);
-const [tokens,setTokens]=useState(false)
-  const [user_coup,setCoup]=useState(null)
-  const coupun_data="1234@sara"
 
-  const re_offer=location.state?.Offer;
-  useEffect(()=>{
- if(re_offer){
-    setOffer(re_offer)
-      setTokens(true); 
-  }
-},[re_offer]
-)
+
 
  
-  const coupens = () => {
-  if (coupun_data == user_coup) {
-    const newOffer = baseAmount * 0.10;
 
-    setOffer(newOffer);
+  const [showModal, setShowModal] = useState(false);
+
+   
+    const saved_add=location.state?.saved_address ;
+  
+    const current_add=location.state?.current_address ;
+   
+  
+
+  
+
+
+    useEffect(()=>{
+  const timer= setTimeout(()=>{
+   localStorage.removeItem("user")
+    setUser(null)
+  },600000)
+   return ()=>clearTimeout(timer)
+    },[])
+  
+  const [tokens,setTokens]=useState(false)
+    const [user_coup,setCoup]=useState(null)
+    const coupun_data="1234@sara"
+  const coupens=()=>{
+  if(coupun_data==user_coup){
+    toast.success("Coupun Applied")
     setTokens(true);
-    setShowModal(false);
-
-    localStorage.setItem("offer", JSON.stringify(newOffer.toFixed(2)));
-
-    toast.success("Coupon Applied");
-  } else {
-    toast.error("Coupon Not matched");
+    setShowModal(false)
   }
-};
-
-  const [open, setOpen] = useState(false);
-
-  const toggleDropdown = () => setOpen(!open);
-
-const [prices,setPrices]=useState([]);
-
-useEffect(()=>{
- const data =JSON.parse(localStorage.getItem("price_details"))||[]
- setPrices(data)
-
-},[])
-
-const menAmount=prices[0];
-const womenAmount=prices[1];
-const kidsAmount=prices[2];
-const baseAmount = prices[3] + 20;
-
-
-const finalAmount = tokens ? baseAmount - offer : baseAmount ;
-localStorage.setItem("totalAmount", JSON.stringify(finalAmount));
-
-
-/* if(tokens){
-  offer=totalAmount*0.10
-  totalAmount=totalAmount-offer
-  localStorage.setItem("totalAmount",JSON.stringify(totalAmount))
-} */
-
-
-const date_details=location.state?.data_details;
+  else{
+    toast.error("Coupun Not matched")
+  }
+  }
+    const [open, setOpen] = useState(false);
+  
+    const toggleDropdown = () => setOpen(!open);
+  
+  const [prices,setPrices]=useState([]);
+  let offer=0;
+  useEffect(()=>{
+   const data =JSON.parse(localStorage.getItem("price_details"))||[]
+   setPrices(data)
+  
+  },[])
+  
+  const menAmount=prices[0];
+  const womenAmount=prices[1];
+  const kidsAmount=prices[2];
+  let totalAmount=prices[3]+20;
+  
+  if(tokens){
+    offer=totalAmount*0.10
+    totalAmount=totalAmount-offer
+    localStorage.setItem("totalAmount",JSON.stringify(totalAmount))
+  }
+  useEffect(()=>{
+    localStorage.setItem("totalAmount",JSON.stringify(totalAmount))
+  },[])
 
 
+  const deliver=
+  JSON.parse(localStorage.getItem("address"))
 
-
-
+   
 
   return (
-    
-
-    <div className=''>
-      
-<ToastContainer position='top-right' autoClose={3000}/>
-<nav className="navbar navbar-expand-lg  px-4" style={{backgroundColor:"#ffff8a"}}>
+    <div>
+      <ToastContainer position="top-right" autoClose={3000}/>
+      <nav className="navbar navbar-expand-lg  px-4" style={{backgroundColor:"#ffff8a"}}>
       <a className="navbar-brand fw-bold" href="/">Wrinkle Away</a>
 
       <div className="ms-auto">
@@ -186,24 +194,24 @@ const date_details=location.state?.data_details;
       
       </div>
     </nav>
-       <div className=''> 
+  
+   <div className=''> 
 <div className=' conatiner  m-4 d-flex gap-3   col-md-8 mx-auto '>
   
-
-  <h3 className='fw-dark'>Order</h3>
-
+  {tokens ?   <h3 className='fw-light'>Order </h3>:
+  <h3 className='fw-light'>Order</h3>
+}
   <h3 className='fw-light'>----------------------- </h3>
 
-  <h3 className='fw-light'>review</h3>
- 
+<h3 className='fw-dark'>Review</h3>
   <h3 className='fw-light'>----------------------- </h3>
   <h3 className='   fw-light'> Payment</h3>
 
 </div>
 
 <hr></hr>
-<div className='container d-flex justify-content-between'>
-  {(current_add && current_add !== "undefined-undefined") ? (
+<div className='container d-flex justify-content-center'>
+ {(current_add && current_add !== "undefined-undefined") ? (
   <button className='btn btn-primary rounded-pill text-dark' style={{width:"300px",backgroundColor:"#e9e951"}}>
     Delivery at {current_add}
   </button>
@@ -212,15 +220,6 @@ const date_details=location.state?.data_details;
     Delivery at {saved_add}
   </button>
 ) : null}
-
-  <buttton className="btn btn-primary rounded-pill text-dark but" style={{width:"100px",backgroundColor:"#e9e951"}} onClick={()=>navigat('/address_details',
-{ state:{
-date_details
- }
-}
- 
- )}
->Change</buttton>
 </div>
 </div>
 <hr></hr>
@@ -242,11 +241,13 @@ date_details
   
 </div>
 <div className='d-flex '>
-  <h4>Coupon discount</h4>
-  {tokens ? <h5  style={{marginLeft:"350px",cursor:"pointer",color:"red"}}>$ -{offer.toFixed(2)}</h5> :
-<h6 className='text-primary ' onClick={()=>setShowModal(true)}style={{marginLeft:"320px",cursor:"pointer"}}>Apply coupon</h6>
-}
- {showModal && (
+  <h4>Discount Applied </h4>
+{Offer?
+ <h5  style={{marginLeft:"350px",cursor:"pointer",color:"red"}}>$ -{Offer.toFixed(2)}</h5>:
+ <h5  style={{marginLeft:"350px",cursor:"pointer",color:"red"}}>$ -0</h5>
+   } 
+
+ {showModal&& (
   <div className="modal-overlay">
     <div className="modal-box">
       <h2>Apply Coupon to get 10% offer</h2>
@@ -271,24 +272,35 @@ date_details
   </div>
   <div className='d-flex '>
   <h3 className='fw-bold '>Total Amount </h3>
-  <h4 className='fw-bold ' style={{marginLeft:"360px"}}>$ {finalAmount}</h4>
+  <h4 className='fw-bold ' style={{marginLeft:"360px"}}>$ {TotalAmount}</h4>
   </div>
 </div> 
 </div>
 
 <hr></hr>
-<div className='container d-flex justify-content-center mt-4'>
-  <button className='btn  fw-bold rounded-pill but
-   ' style={{width:"400px",backgroundColor:"#e9e951"}} onClick={()=>navigat('/review' ,{
+<div className='container d-flex justify-content-center mt-4 gap-5'>
+  <button onClick={()=>{
+    navigat('/delivery',{
     state:{
       current_address:current_add,
       saved_address:saved_add,
-      offer,
-      baseAmount
-   
+      Offer,
+      TotalAmount
     }
-   }
-  )}>Continue</button>
+  }
+)
+}
+  } className='btn  fw-bold rounded-pill but ' style={{width:"300px",backgroundColor:"#e9e951"}}
+  > Back to Order </button>
+  <button className='btn  fw-bold rounded-pill but ' style={{width:"300px",backgroundColor:"#e9e951"}} onClick={()=>{navigat('/payment',
+   { state:{
+          current_address:current_add,
+      saved_address:saved_add,
+ Offer,
+      TotalAmount
+    }
+  }
+  )}}>Continue</button>
 </div>
 
 <footer className=" text-black py-4 mt-5  gap-5 " style={{backgroundColor:"#FFFF8A"}}>
@@ -344,4 +356,4 @@ date_details
   )
 }
 
-export default Delivery
+export default Reviewpage

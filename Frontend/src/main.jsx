@@ -23,6 +23,10 @@ import Location from './Location.jsx'
 import Listing_details from './Listing_details.jsx'
 import Delivery from './Delivery.jsx'
 import Address_delivery from './Address_delivery.jsx'
+import Payment from './Payment.jsx'
+import Reviewpage from './Reviewpage.jsx'
+import About from './About.jsx'
+import Dashboard from './Admin/Dashboard.jsx'
 
 const obj=createBrowserRouter([
   {
@@ -101,8 +105,23 @@ element:<Price4/>
 {
   path:'/delivery',
   element:<Delivery/>
+},
+{
+  path:'/payment',
+  element:<Payment/>
+},
+{
+  path:'/review',
+  element:<Reviewpage/>
+},
+{
+  path:'/abouts',
+  element:<About/>
+},
+{
+  path:'/admin',
+  element:<Dashboard/>
 }
-  
 ])
 createRoot(document.getElementById('root')).render(
 
