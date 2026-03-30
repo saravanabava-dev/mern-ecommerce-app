@@ -16,6 +16,7 @@
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-parser": "^1.0.0",
     "express-session": "^1.19.0",
@@ -26,6 +27,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
-    "password-validator": "^5.3.0"
+    "password-validator": "^5.3.0",
+    "razorpay": "^2.9.6"
   }
 }

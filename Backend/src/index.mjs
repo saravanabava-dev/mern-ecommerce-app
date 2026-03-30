@@ -18,7 +18,12 @@ import {Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import crypto from  'crypto'
 import { setpass } from "./password.mjs";
 
-require('dotenv').config()
+    import dotenv from 'dotenv';
+dotenv.config();
+import Razorpay from "razorpay";
+
+
+
 
 const app=expressn();
 app.use(expressn.json())
@@ -43,6 +48,8 @@ maxAge:6000000
 
 app.use(passport.initialize())
 app.use(passport.session())
+
+
 
 
 
@@ -197,8 +204,30 @@ app.listen(5174,()=>{
 });
 
 
-/* 
-import { Strategy as LocalStrategy } from "passport-local";
+
+const razorpay=new Razorpay({
+    key_id:"rzp_test_SW9JPR1httAmNB",
+    key_secret:"Y2RZ2CEjRr22ds6VB9OG75nX"
+})
+app.post('/create-order', async (req,res)=>{
+    const amounts=req.body.TotalAmount;
+    try{
+        const options={
+            amount:amounts*100,
+            currency:"INR"
+        }
+        const order= await razorpay.orders.create(options);
+        res.json(order);
+    }
+    catch(err){
+        console.log(err.message);
+        res.send({msg:"Order not created"})
+    }
+})
+
+
+
+/* import { Strategy as LocalStrategy } from "passport-local";
 
 
 app.use(passport.initialize())
@@ -239,7 +268,7 @@ next(null,id)
 passport.deserializeUser((id,next)=>{
 
 const id=data
-}) */
+}) 
 
 
 
@@ -280,20 +309,21 @@ if(data){
 return res.json({message:"Login Not matched"})
 
 })
+ 
+
+
+
+
+
+ 
+
+ 
+
+
+
+
+
+
+
+ 
  */
-
-
-
-
-
- 
-
- 
-
-
-
-
-
-
-
- 

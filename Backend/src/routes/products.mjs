@@ -1,5 +1,7 @@
 import {Router} from 'express'
 import { products } from '../util/contains.mjs';
+
+import { Delivery } from '../Mongoose/Schema/deliver_details.mjs';
 const routers=Router();
 
  routers.get('/api',(req,res)=>{
@@ -44,4 +46,22 @@ req.sessionStore.get(req.session.id,(err,sessionData)=>{
      }
      res.send("msg:{Illegal number the id is not defined}")
   })
+
+routers.post('/deliver', async (req,res)=>{
+    const {body}=req;
+const saved=new Delivery(body)
+try{
+    await saved.save();
+    return res.status(201).send({msg:"data stored succesfully"})
+}
+catch(err){
+    res.send({msg:"Data Not stored"})
+}
+
+})
+
+
+
+
+
 export default routers
