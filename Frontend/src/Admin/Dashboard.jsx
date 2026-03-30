@@ -35,7 +35,7 @@ export default function Dashboard() {
   return (
     <div className="flex">
 
-      {/* SIDEBAR */}
+    
       <div className="w-64 h-screen bg-gray-900 text-white p-5">
         <h2 className="text-2xl font-bold mb-6">Admin</h2>
 
@@ -46,16 +46,19 @@ export default function Dashboard() {
         </ul>
       </div>
 
-      {/* MAIN CONTENT */}
-      <div className="flex-1 p-6 bg-gray-100 min-h-screen">
+ 
+      <div className="flex-1 p-6 bg-gray-100 vh-100">
 
         <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
         <div className="grid grid-cols-3 gap-6">
 
-          <Donut title="Users" value={users.length} total={10} />
-          <Donut title="Orders" value={orders.length} total={10} />
-
+          <Donut title="Users" value={users.length} total={10}  style={{borderRadius:"25px"}}/>
+          <Donut title="Orders" value={orders.length} total={10}  style={{borderRadius:"25px"}} />
+       
+      <div className="p-5 shadow bg-white flex justify-content-center" style={{borderRadius:"25px"}}>
+        <div>Revenue</div>
+      </div>
         </div>
 
       </div>
@@ -74,11 +77,11 @@ function Donut({ title, value, total }) {
   const percent = ((value / total) * 100).toFixed(0);
 
   return (
-    <div className="bg-white p-5 rounded-4xl shadow text-center">
+    <div className="bg-white p-5 rounded-4xl shadow text-center"  style={{borderRadius:"25px"}}>
 
       <h3 className="text-gray-500">{title}</h3>
 
-      <div className="relative w-full h-40">
+      <div className="relative w-100 h-40"  >
 
         <ResponsiveContainer>
           <PieChart>
@@ -94,7 +97,7 @@ function Donut({ title, value, total }) {
           </PieChart>
         </ResponsiveContainer>
 
-        {/* CENTER TEXT */}
+      
         <div className="absolute inset-0 flex items-center justify-center font-bold">
           {percent}%
         </div>
