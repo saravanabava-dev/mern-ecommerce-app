@@ -206,8 +206,8 @@ app.listen(5174,()=>{
 
 
 const razorpay=new Razorpay({
-    key_id:"rzp_test_SW9JPR1httAmNB",
-    key_secret:"Y2RZ2CEjRr22ds6VB9OG75nX"
+    key_id:"RAZOR_PUBLIC",
+    key_secret:"RAZOR_PRIVATE"
 })
 app.post('/create-order', async (req,res)=>{
     const amounts=req.body.TotalAmount;
