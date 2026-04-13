@@ -1,9 +1,11 @@
 
+import axios from 'axios';
 import React from 'react'
 import { useRef,useState,useEffect } from 'react';
 import { useNavigate,Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer,toast } from 'react-toastify';
+
 
 
 function Delivery() {
@@ -104,9 +106,11 @@ localStorage.setItem("totalAmount", JSON.stringify(finalAmount));
 const date_details=location.state?.data_details;
 
 
-
-
-
+const Details_update=()=>{
+  axios.post('http://localhost:5174/deliver',{User_id:user._id,  Pickup_Details: `${date_details.pickup_date} ${date_details.pickup_time}`,
+  Delivery_Details: `${date_details.delivery_date} ${date_details.deliver_time}`,Men:menAmount,Women:womenAmount,kids:kidsAmount,TotalAmount:baseAmount,Address:current_add||saved_add})
+.then((res)=>console.log(res.data)).catch((err)=>console.log(err.message))
+}
 
   return (
     
@@ -279,16 +283,21 @@ date_details
 <hr></hr>
 <div className='container d-flex justify-content-center mt-4'>
   <button className='btn  fw-bold rounded-pill but
-   ' style={{width:"400px",backgroundColor:"#e9e951"}} onClick={()=>navigat('/review' ,{
+   ' style={{width:"400px",backgroundColor:"#e9e951"}} onClick={()=>{
+      Details_update();
+    navigat('/review' ,{
     state:{
       current_address:current_add,
       saved_address:saved_add,
       offer,
       baseAmount
-   
+    
     }
    }
-  )}>Continue</button>
+  );
+
+
+    } }>Continue</button>
 </div>
 
 <footer className=" text-black py-4 mt-5  gap-5 " style={{backgroundColor:"#FFFF8A"}}>

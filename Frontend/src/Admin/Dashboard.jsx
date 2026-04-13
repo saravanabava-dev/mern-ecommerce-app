@@ -1,111 +1,241 @@
 
 
-import { useEffect, useState } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function Dashboard() {
+function AdminPanel() {
+  const [items, setItems] = useState([]);
+  const [activeTab, setActiveTab] = useState("Men");
+  const [activeMenu, setActiveMenu] = useState("Items");
 
-  const [users, setUsers] = useState([]);
-  const [orders, setOrders] = useState([]);
+  const [form, setForm] = useState({
+    name: "",
+    price: "",
+    quantity: 0,
+    category: "Men",
+  });
 
-  // Runs when page loads
+  const [editId, setEditId] = useState(null);
+
   useEffect(() => {
-
-    // Dummy Users
-    const dummyUsers = [
-      { name: "User1" },
-      { name: "User2" },
-      { name: "User3" }
-    ];
-
-    // Dummy Orders
-    const dummyOrders = [
-      { id: 1 },
-      { id: 2 },
-      { id: 3 },
-      { id: 4 },
-      { id: 5 }
-    ];
-
-    setUsers(dummyUsers);
-    setOrders(dummyOrders);
-
+    fetchItems();
   }, []);
 
+  const fetchItems = async () => {
+    const res = await axios.get("http://localhost:5174/men_items");
+    setItems(res.data);
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (editId) {
+      await axios.put(`http://localhost:5174/men_items/${editId}`, form);
+      setEditId(null);
+    } else {
+      await axios.post("http://localhost:5174/men_items", {
+        ...form,
+        price: Number(form.price),
+        quantity: Number(form.quantity),
+      });
+    }
+
+    setForm({ name: "", price: "", quantity: 0, category: "Men" });
+    fetchItems();
+  };
+
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost:5174/men_items/${id}`);
+    fetchItems();
+  };
+
+  const handleEdit = (item) => {
+    setForm(item);
+    setEditId(item.id);
+  };
+
+  const filteredItems = items.filter(
+    (item) => item.category === activeTab
+  );
+
   return (
-    <div className="flex">
+    <div className="d-flex">
 
     
-      <div className="w-64 h-screen bg-gray-900 text-white p-5">
-        <h2 className="text-2xl font-bold mb-6">Admin</h2>
+      <div style={{
+        width: "230px",
+        height: "100vh",
+        background: "#1e1e2f",
+        color: "white",
+        padding: "20px"
+      }}>
+        <h3 className="mb-4">Admin Panel</h3>
 
-        <ul className="space-y-4">
-          <li className="cursor-pointer">Dashboard</li>
-          <li className="cursor-pointer">Users</li>
-          <li className="cursor-pointer">Orders</li>
-        </ul>
+        {["Dashboard", "Items", "Orders", "Customers", "Orders"].map(menu => (
+          <div
+            key={menu}
+            onClick={() => setActiveMenu(menu)}
+            style={{
+              padding: "10px",
+              marginBottom: "10px",
+              cursor: "pointer",
+              borderRadius: "8px",
+              background: activeMenu === menu ? "#444" : "transparent"
+            }}
+          >
+            {menu}
+          </div>
+        ))}
       </div>
 
- 
-      <div className="flex-1 p-6 bg-gray-100 vh-100">
 
-        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+      <div className="w-100">
 
-        <div className="grid grid-cols-3 gap-6">
-
-          <Donut title="Users" value={users.length} total={10}  style={{borderRadius:"25px"}}/>
-          <Donut title="Orders" value={orders.length} total={10}  style={{borderRadius:"25px"}} />
-       
-      <div className="p-5 shadow bg-white flex justify-content-center" style={{borderRadius:"25px"}}>
-        <div>Revenue</div>
-      </div>
+   
+        <div style={{
+          height: "60px",
+          background: "#FFFF8A",
+          display: "flex",
+          justifyContent:"center",
+          alignItems: "center",
+          paddingLeft: "20px",
+          fontWeight: "bold",
+          fontSize: "20px"
+        }}>
+          Admin Control Panel
         </div>
 
-      </div>
-    </div>
-  );
-}
+        <div className="p-4">
 
-
-function Donut({ title, value, total }) {
-
-  const data = [
-    { name: "value", value: value },
-    { name: "rest", value: total - value }
-  ];
-
-  const percent = ((value / total) * 100).toFixed(0);
-
-  return (
-    <div className="bg-white p-5 rounded-4xl shadow text-center"  style={{borderRadius:"25px"}}>
-
-      <h3 className="text-gray-500">{title}</h3>
-
-      <div className="relative w-100 h-40"  >
-
-        <ResponsiveContainer>
-          <PieChart>
-            <Pie
-              data={data}
-              dataKey="value"
-              innerRadius={40}
-              outerRadius={70}
-            >
-              <Cell fill="#6366f1" />
-              <Cell fill="#e5e7eb" />
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
+     
+          {activeMenu === "Dashboard" && (
+            <h3>Welcome Admin </h3>
+          )}
 
       
-        <div className="absolute inset-0 flex items-center justify-center font-bold">
-          {percent}%
+          {activeMenu === "Items" && (
+            <>
+              <h3>Manage Items</h3>
+
+             
+              <form onSubmit={handleSubmit} className="card p-3 mb-4">
+                <div className="row">
+                  <div className="col">
+                    <input name="name" placeholder="Item"
+                      className="form-control"
+                      value={form.name}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col">
+                    <input name="price" type="number" placeholder="Price"
+                      className="form-control"
+                      value={form.price}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col">
+                    <input name="quantity" type="number" placeholder="Qty"
+                      className="form-control"
+                      value={form.quantity}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col">
+                    <select name="category"
+                      className="form-control"
+                      value={form.category}
+                      onChange={handleChange}
+                    >
+                      <option>Men</option>
+                      <option>Women</option>
+                      <option>Kids</option>
+                    </select>
+                  </div>
+
+                  <div className="col">
+                    <button className="btn btn-success w-100">
+                      {editId ? "Update" : "Add"}
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+          
+              <div className="d-flex gap-3 mb-3">
+                {["Men", "Women", "Kids"].map(tab => (
+                  <button
+                    key={tab}
+                    className={`btn ${activeTab === tab ? "btn-dark" : "btn-outline-dark"}`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {filteredItems.map(item => (
+                    <tr key={item.id}>
+                      <td>{item.name}</td>
+                      <td>₹{item.price}</td>
+                      <td>{item.quantity}</td>
+                      <td>
+                        <button
+                          className="btn btn-warning btn-sm me-2"
+                          onClick={() => handleEdit(item)}
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+
+
+          {activeMenu === "Orders" && (
+            <h3> Orders Page</h3>
+          )}
+
+          {activeMenu === "Customers" && (
+            <h3> Customers Page </h3>
+          )}
+
+          {activeMenu === "Order" && (
+            <h3> Orders Page </h3>
+          )}
+
         </div>
-
       </div>
-
-      <p className="text-xl font-bold">{value}</p>
-
     </div>
   );
 }
+
+export default AdminPanel;

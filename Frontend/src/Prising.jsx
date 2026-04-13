@@ -1,23 +1,29 @@
+import axios from 'axios';
 import React from 'react'
 import {useState,useRef,useEffect } from 'react';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate,useLocation, useAsyncError } from 'react-router-dom';
 function Prising() {
     
 
 const location=useLocation();
-  const[value1,setVaalue1]=useState(0);
-   const[value2,setVaalue2]=useState(0);
- const[value3,setVaalue3]=useState(0);
- const[value4,setVaalue4]=useState(0);
- const[value5,setVaalue5]=useState(0);
+  const[items,setItems]=useState([]);
 
-    const[value6,setVaalue6]=useState(0);
+
+useEffect(()=>{
+  axios.get("http://localhost:5174/men_items").then(res=>{
+const menItems=res.data.filter(i=>i.category=="Men")
+console.log(menItems)
+
+setItems(menItems);
+  }
+  )
+},[])
 
       const men=location.state?.men
   const women=location.state?.women;
   const kids=location.state?.kids
 
-    const men1=[value1,value2,value3,value4,value5,value6]
+    
 const navigate=useNavigate();
 
 
@@ -25,81 +31,43 @@ const navigate=useNavigate();
 
 
 const men3=location.state?.data
-useEffect(()=>{
-if(men) {
-  setVaalue1(men[0])
-   setVaalue2(men[1])
-    setVaalue3(men[2])
-     setVaalue4(men[3])
-      setVaalue5(men[4])
-       setVaalue6(men[5])
 
-}
-},[men])
 
 const[user,setUser]=useState(
 JSON.parse(localStorage.getItem("user"))
 )
-    
-const update1=()=>{
-  
-  setVaalue1(value1+1);
-}
-const deleter1=()=>{
-  if(0<value1){
-setVaalue1(value1-1)
+
+const updates= async(index)=>{
+  const newData=[...items];
+  newData[index].quantity+=1;
+  setItems(newData)
+   try {
+    await axios.put (`http://localhost:5174/men_items/${newData[index]._id}`, {
+      quantity: newData[index].quantity,
+    });
+  } catch (err) {
+    console.error("Failed to update quantity in DB:", err);
   }
 }
-const updater2=()=>{
+        
+const deletes= async (index)=>{
+  const newData=[...items];
+
+
+  if (newData[index].quantity > 0) 
+    newData[index].quantity -= 1;
   
-  setVaalue2(value2+1);
-}
-const deleter2=()=>{
-  if(0<value2){
-setVaalue2(value2-1)
-  }
-}
-const updater3=()=>{
-  
-  setVaalue3(value3+1);
-}
-const deleter3=()=>{
-  if(0<value3){
-setVaalue3(value3-1)
-  }
-}
-const updater4=()=>{
-  
-  setVaalue4(value4+1);
-}
-const deleter4=()=>{
-  if(0<value4){
-setVaalue4(value4-1)
+  setItems(newData);
+
+  try {
+    await axios.put(`http://localhost:5174/men_items/${newData[index]._id}`, {
+      quantity: newData[index].quantity,
+    });
+  } catch (err) {
+    console.error("Failed to update quantity in DB:", err);
   }
 }
 
-const updater5=()=>{
-  
-  setVaalue5(value5+1);
-}
-
-const deleter5=()=>{
-  if(0<value5){
-setVaalue5(value5-1)
-  }
-}
-
-const update6=()=>{
-  
-  setVaalue6(value6+1);
-}
-
-const deleter6=()=>{
-  if(0<value6){
-setVaalue6(value6-1)
-  }
-}
-    
    const dropdownRef=useRef();
       useEffect(() => {
       function handleClickOutside(e) {
@@ -309,76 +277,44 @@ setVaalue6(value6-1)
   <div className="col-4 ">Price per Piece</div>
   <div className="col-3 ">men</div>
   </div>
-  <div className='d-flex'>
-  <div className='d-flex flex-column gap-4 mt-4 ms-1'>
+ 
 
-        <h5 className='ms-4 fw-semibold me-4'>Shirt</h5>
-                <h5 className='ms-4 fw-semibold '>Cotton pant</h5>
-                <h5 className='ms-4 fw-semibold '>jeans pant</h5>
-                         <h5 className='ms-4 fw-semibold '>Dhoti</h5>
-                 <h5 className='ms-4 fw-semibold '>blazer</h5>
-                  <h5 className='ms-4 fw-semibold '>Jacket</h5>
-                  
+ <div className='d-flex '>
 
+  <div className='d-flex flex-column gap-4 mt-4 ms-4'>
+    {items.map((item) => (
+      <h5 key={item._id} className='fw-semibold'>
+        {item.name}
+      </h5>
+    ))}
   </div>
-   <div className=' d-flex flex-column gap-4 mt-4'  style={{marginLeft:"210px"}}>  
 
-        <h5 className='ms-4 fw-semibold me-4'>$12</h5>
-                <h5 className='ms-4 fw-semibold '>$20</h5>
-                <h5 className='ms-4 fw-semibold '>$30</h5>
-                         <h5 className='ms-4 fw-semibold '>$22</h5>
-                 <h5 className='ms-4 fw-semibold '>$24</h5>
-                  <h5 className='ms-4 fw-semibold '>$6</h5>
-                  
 
+  <div className='d-flex flex-column gap-4 mt-4 ' style={{marginLeft:"240px"}}>
+    {items.map((item) => (
+      <h5 key={item._id} className='fw-semibold'>
+        ₹{item.price}
+      </h5>
+    ))}
   </div>
-   <div className=' d-flex flex-column gap-3 mt-4  ' style={{marginLeft:"200px"}}>
-    <div className="d-flex  px-3 py-1 rounded-pill men " style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle" onClick={deleter1}>-</button>
-  <span className="mx-2 fw-bold">{value1}</span>
-  <button className="btn btn-light btn-sm rounded-circle" onClick={update1}>+</button>
-</div>
 
-<div className="d-flex px-3 py-1 rounded-pill men "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter2}>-</button>
-  <span className="mx-2 fw-bold">{value2}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={updater2}>+</button>
-</div>
 
-<div className="d-flex  px-3 py-1 rounded-pill men "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter3}>-</button>
-  <span className="mx-2 fw-bold">{value3}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={updater3}>+</button>
-</div>
-
-<div className="d-flex  px-3 py-1 rounded-pill men "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter4}>-</button>
-  <span className="mx-2 fw-bold">{value4}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={updater4}>+</button>
-</div>
-
-<div className="d-flex px-3 py-1 rounded-pill men "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter5}>-</button>
-  <span className="mx-2 fw-bold">{value5}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={updater5}>+</button>
-</div>
-
-<div className="d-flex   px-3 py-1 rounded-pill men "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter6}>-</button>
-  <span className="mx-2 fw-bold">{value6}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={update6}>+</button>
-</div>
-
-    
-        
-                  
-
+  <div className='d-flex flex-column gap-3 mt-4' style={{marginLeft:"205px"}}>
+    {items.map((item, index) => (
+      <div 
+        key={item._id}
+        className="d-flex px-3 py-1 rounded-pill"
+        style={{backgroundColor:"#FFFF8A"}}
+      >
+        <button className="btn btn-light btn-sm rounded-circle" onClick={()=>deletes(index)}>-</button>
+        <span className="mx-2 fw-bold">{item.quantity || 0}</span>
+        <button className="btn btn-light btn-sm rounded-circle" onClick={()=>updates(index)}>+</button>
+      </div>
+    ))}
   </div>
-  </div>
-</div>
-   
 
-    
+</div>
+ 
     
     </div>
     
@@ -386,7 +322,7 @@ setVaalue6(value6-1)
     
 </div>
 
-
+  
 
     </div>
     <div  className='d-flex gap-5 justify-content-center '>
@@ -406,7 +342,7 @@ setVaalue6(value6-1)
     })}>Reset</button>
 </div>
     </div>
-  
+  </div>
       <footer className=" text-black py-4 mt-5  gap-5 " style={{backgroundColor:"#FFFF8A"}}>
     <div className='d-flex'>
       <div className=" ms-5 d-flex flex-column ">
@@ -464,6 +400,7 @@ setVaalue6(value6-1)
     </div>
 
   )
-}
+  }
+  
 
 export default Prising
