@@ -34,11 +34,12 @@ function AdminPanel() {
     e.preventDefault();
 
     if (editId) {
-      await axios.put(`http://localhost:5174/men_items/${editId}`, form);
+      await axios.put(`http://localhost:5174/men_items/update/${editId}`, form);
       setEditId(null);
     } else {
-      await axios.post("http://localhost:5174/men_items", {
-        ...form,
+      const {_id,...data}=form
+      await axios.post("http://localhost:5174/men_items/add", {
+        ...data,
         price: Number(form.price),
         quantity: Number(form.quantity),
       });
@@ -55,7 +56,7 @@ function AdminPanel() {
 
   const handleEdit = (item) => {
     setForm(item);
-    setEditId(item.id);
+    setEditId(item._id);
   };
 
   const filteredItems = items.filter(
@@ -147,8 +148,7 @@ function AdminPanel() {
                       onChange={handleChange}
                     />
                   </div>
-
-                  <div className="col">
+                               <div className="col">
                     <select name="category"
                       className="form-control"
                       value={form.category}
@@ -167,7 +167,21 @@ function AdminPanel() {
                   </div>
                 </div>
               </form>
+{/* 
+<div className="d-flex gap-3 mb-3">
+{["Men","Women","Kids"].map(tab=>(
+  <button
+  key={tab} 
+  className={`btn ${activeTab===tab?"btn-dark":"btn-outline-dark"}`}
+  onClick={()=>setActiveTab(tab)}
+  >
+{tab}
+  </button>
 
+))
+
+}
+</div> */}
           
               <div className="d-flex gap-3 mb-3">
                 {["Men", "Women", "Kids"].map(tab => (
@@ -193,7 +207,7 @@ function AdminPanel() {
 
                 <tbody>
                   {filteredItems.map(item => (
-                    <tr key={item.id}>
+                    <tr key={item._id}>
                       <td>{item.name}</td>
                       <td>₹{item.price}</td>
                       <td>{item.quantity}</td>
@@ -207,7 +221,7 @@ function AdminPanel() {
 
                         <button
                           className="btn btn-danger btn-sm"
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => handleDelete(item._id)}
                         >
                           Delete
                         </button>
