@@ -8,7 +8,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 function About() {
 
-
+  
     const dropdownRef=useRef();
       useEffect(() => {
       function handleClickOutside(e) {

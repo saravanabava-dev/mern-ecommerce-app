@@ -3,6 +3,7 @@ import React,{useState,useEffect}from 'react'
 import {useNavigate} from 'react-router-dom'
 import { useRef } from 'react';
 import {ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 
 
 function Servicesfun() {
@@ -24,8 +25,17 @@ useEffect(()=>{
       document.removeEventListener("mousedown",handleClick)
     }
 }
+
+
 ,[]
 )
+
+
+useEffect(()=>{
+  ServiceImg();
+  const interval = setInterval(ServiceImg, 5000);
+  return () => clearInterval(interval);
+},[])
 
   const user=JSON.parse(localStorage.getItem("user"))
     
@@ -48,6 +58,12 @@ navigat('/login',{state:{from:"/price"}})
     }
   }
   const navigat=useNavigate();
+  const [Images,setImages]=useState([])
+  const ServiceImg=async()=>{
+    const res=await axios.get("http://localhost:5174/images");
+    setImages(res.data);
+
+  }
   return (
     <>
 <ToastContainer position="top-right" autoClose={3000}/>
@@ -60,7 +76,7 @@ navigat('/login',{state:{from:"/price"}})
       <div className="ms-auto">
         <a className=" nav-link me-4 d-inline" href="/">Home</a>
         <a className="nav-link me-4 d-inline " href="/">Services</a>
-        <a className=" nav-link me-4 d-inline" href="/about">About</a>
+        <a className=" nav-link me-4 d-inline" href="/abouts">About</a>
  {user?(
 
 <div ref={dropdownRef} style={{ position: "relative", display: "inline-block" }}>
@@ -136,63 +152,32 @@ navigat('/login',{state:{from:"/price"}})
 
     <div className='container mt-4 '>
   <div className='row g-4'>
-<div className=' col-md-4 col-12'>
-<div className='card h-100 sss '>
-  <img   src='/Stream.jpg' className='card-img-top ss'/>
-    <div className='card-body ' >
-    <h5 className='text-center fw-bold'>Stream Ironing</h5>
 
-  </div>
-</div>
 
-</div>
-<div className='col-md-4  col-12 g-4'>
-<div className='card h-100 sss'>
-  <img className='card-img-top ss ' src='/wa.jpg' alt='stream'/>
+{Images.map((image)=>{
+  let ime=`http://localhost:5174/${image.Image}`
+  return(
+  <div className='col-md-4  col-12 g-4'>
+<div className='card  sss'>
+
+  <img className='card-img-top ' src={ime} alt='str' style={{ height: "250px", objectFit: "cover" }}/>
   <div className='card-body'>
-    <h5 className='text-center fw-bold'>Clean Washing</h5>
+    <h5 className='text-center fw-bold'>{image.name}</h5>
   </div>
 </div>
 
 </div>
-<div className='col-md-4 col-12 g-4'>
-<div className='card h-100 sss'>
-  <img className='card-img-top  ss  ' src='/fol.jpg'/> 
-    <div className='card-body'>
-    <h5 className='text-center fw-bold '>Wash and Fold</h5>
+  )
+  }
+)
+}
 
-  </div>
-</div>
-</div>
+
 
 
 
  
-<div className=' col-md-4 col-12 g-4'>
-<div className='card h-100 sss '>
-  <img   src='/leather.jpg' className='card-img-top ss '/>
-    <div className='card-body'>
-    <h5 className='text-center fw-bold '>Leather Cleaning</h5>
 
-  </div>
-</div>
-</div>
-<div className='col-md-4 col-12 g-4'>
-<div className='card h-100 sss'>
-  <img className='card-img-top ss ' src='/wet.jpg' alt='stream'/>
-  <div className='card-body'>
-    <h5 className='text-center fw-bold '>Carpet Cleaning</h5>
-  </div>
-</div>
-</div>
-<div className='col-md-4 col-12 g-4'>
-<div className='card h-100 sss'>
-  <img className='card-img-top  ss ' src='/washs.jpg'/> 
-    <div className='card-body'>
-    <h5 className='text-center fw-bold '>Dry Cleaning</h5>
-  </div>
-</div>
-</div>
 <div className='container  mt-5  '>
   <div className='row '>
   <div className=' col-md-6 col-12 '>

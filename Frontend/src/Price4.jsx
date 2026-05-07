@@ -1,97 +1,16 @@
+import axios from 'axios';
 import React from 'react'
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 function Price4() {
   const location = useLocation();
 
-  const [value1, setVaalue1] = useState(0);
-  const [value2, setVaalue2] = useState(0);
-  const [value3, setVaalue3] = useState(0);
-  const [value4, setVaalue4] = useState(0);
-  const [value5, setVaalue5] = useState(0);
 
-  const [value6, setVaalue6] = useState(0);
-
-
-
-  const men = location.state?.men || [0, 0, 0, 0, 0, 0]
-  const women = location.state?.women || [0, 0, 0, 0, 0, 0]
-  const kids = location.state?.kids || [0, 0, 0, 0, 0, 0]
-
-  const kids1 = [value1, value2, value3, value4, value5, value6]
-
-  useEffect(() => {
-    if (kids) {
-      setVaalue1(kids[0])
-      setVaalue2(kids[1])
-      setVaalue3(kids[2])
-      setVaalue4(kids[3])
-      setVaalue5(kids[4])
-      setVaalue6(kids[5])
-    }
-  }, [kids])
+  
 
   const navigate = useNavigate();
 
 
-  const update1 = () => {
-
-    setVaalue1(value1 + 1);
-  }
-  const deleter1 = () => {
-    if (0 < value1) {
-      setVaalue1(value1 - 1)
-    }
-  }
-  const updater2 = () => {
-
-    setVaalue2(value2 + 1);
-  }
-  const deleter2 = () => {
-    if (0 < value2) {
-      setVaalue2(value2 - 1)
-    }
-  }
-  const updater3 = () => {
-
-    setVaalue3(value3 + 1);
-  }
-  const deleter3 = () => {
-    if (0 < value3) {
-      setVaalue3(value3 - 1)
-    }
-  }
-  const updater4 = () => {
-
-    setVaalue4(value4 + 1);
-  }
-  const deleter4 = () => {
-    if (0 < value4) {
-      setVaalue4(value4 - 1)
-    }
-  }
-
-  const updater5 = () => {
-
-    setVaalue5(value5 + 1);
-  }
-
-  const deleter5 = () => {
-    if (0 < value5) {
-      setVaalue5(value5 - 1)
-    }
-  }
-
-  const update6 = () => {
-
-    setVaalue6(value6 + 1);
-  }
-
-  const deleter6 = () => {
-    if (0 < value6) {
-      setVaalue6(value6 - 1)
-    }
-  }
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user"))
   )
@@ -113,16 +32,46 @@ function Price4() {
 
   const toggleDropdown = () => setOpen(!open);
 
-  const reseting = () => {
-    setVaalue1(0);
-    setVaalue2(0);
-    setVaalue3(0);
-    setVaalue4(0);
-    setVaalue5(0);
-    setVaalue6(0);
+ const [kidsItem,setKidsItem]=useState([]);
+ useEffect(()=>{
+  axios.get("http://localhost:5174/men_items").then(res=>{
+    const kids=res.data.filter(i=>i.category=="Kids");
+    setKidsItem(kids);
+    console.log(kids);
+  })
+ },[])
+
+ const deletes=async(index)=>{
+  const newData=[...kidsItem];
+  if(newData[index].quantity>0){
+    newData[index].quantity-=1;
+     setKidsItem(newData);
+  }
+ 
+  try{
+    axios.put(`http://localhost:5174/men_items/${newData[index]._id}`,{
+      quantity:newData[index].quantity
+    })
 
   }
-
+  catch(err){
+    console.log(err.message);
+  }
+}
+ 
+ const updates=async (index)=>{
+      const newData=[...kidsItem];
+      newData[index].quantity+=1
+      setKidsItem(newData);
+      try{
+        axios.put(`http://localhost:5174/men_items/${newData[index]._id}`,{
+          quantity:newData[index].quantity,
+        })
+      }
+      catch(err){
+        console.log(err.message);
+      }
+    }
   return (
     <div>
 
@@ -133,7 +82,7 @@ function Price4() {
         <div className="ms-auto">
           <a className="me-4 nav-link d-inline" href="/">Home</a>
           <a className="nav-link me-4 d-inline " href="/ser" >Services</a>
-          <a className="me-4 nav-link d-inline" href="/about">About</a>
+          <a className="me-4 nav-link d-inline" href="/abouts">About</a>
           {user ? (
             <div ref={dropdownRef} style={{ position: "relative", display: "inline-block" }}>
 
@@ -290,23 +239,9 @@ function Price4() {
               <div className='d-flex flex-column  mt-5 ccc ' >
                 <div className='d-flex gap-5 p-3 py-4 mt-2'>
                   <h3 className='ms-4 fw-semibold he' onClick={() => navigate('/price'
-                    , {
-                      state: {
-                        men: men,
-                        women: women,
-                        kids: kids1
-                      }
-                    }
+                   
                   )}>Men</h3>
-                  <h3 className='ms-4  fw-semibold he' onClick={() => navigate('/price2', {
-                    state: {
-
-                      men: men,
-                      women: women,
-                      kids: kids1
-
-                    }
-                  })}>Women</h3>
+                  <h3 className='ms-4  fw-semibold he' onClick={() => navigate('/price2')}>Women</h3>
 
                   <h3 className='ms-4 fw-semibold he1 '>Kids</h3>
 
@@ -320,77 +255,39 @@ function Price4() {
                 </div>
                 <div className='d-flex'>
                   <div className='d-flex flex-column gap-4 mt-4 ms-1'>
-
-                    <h5 className='ms-4 fw-semibold me-4'>Ballgowm</h5>
-                    <h5 className='ms-4 fw-semibold '>Empire Dress</h5>
-                    <h5 className='ms-4 fw-semibold '>wrap Dress</h5>
-                    <h5 className='ms-4 fw-semibold '>Princess Dress</h5>
-                    <h5 className='ms-4 fw-semibold '>Boducorn Dress</h5>
-                    <h5 className='ms-4 fw-semibold '>Barbie Dress</h5>
-
+{kidsItem.map((item)=>(
+<h5 key={item._id} className='ms-4 fw-semibold me-4'>{item.name}</h5>
+))}
+                 
 
                   </div>
-                  <div className=' d-flex flex-column gap-4 mt-4' style={{ marginLeft: "180px" }}>
-
-                    <h5 className='ms-4 fw-semibold me-4'>$11</h5>
-                    <h5 className='ms-4 fw-semibold '>$2</h5>
-                    <h5 className='ms-4 fw-semibold '>$31</h5>
-                    <h5 className='ms-4 fw-semibold '>$2</h5>
-                    <h5 className='ms-4 fw-semibold '>$27</h5>
-                    <h5 className='ms-4 fw-semibold '>$34</h5>
+                  <div className=' d-flex flex-column gap-4 mt-4' style={{ marginLeft: "190px" }}>
+{kidsItem.map((item)=>(
+<h5 key={item._id} className='ms-4 fw-semibold me-4'>{item.price}</h5>
+))}
+                    
+                  
 
 
                   </div>
                   <div className=' d-flex flex-column gap-3 mt-4  ' style={{ marginLeft: "200px" }}>
-                    <div className="d-flex  px-3 py-1 rounded-pill quantity " style={{ backgroundColor: "#FFFF8A" }}>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={deleter1}>-</button>
-                      <span className="mx-2 fw-bold">{value1}</span>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={update1}>+</button>
-                    </div>
-
-                    <div className="d-flex px-3 py-1 rounded-pill quantity " style={{ backgroundColor: "#FFFF8A" }}>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={deleter2}>-</button>
-                      <span className="mx-2 fw-bold">{value2}</span>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={updater2}>+</button>
-                    </div>
-
-                    <div className="d-flex  px-3 py-1 rounded-pill quantity " style={{ backgroundColor: "#FFFF8A" }}>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={deleter3}>-</button>
-                      <span className="mx-2 fw-bold">{value3}</span>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={updater3}>+</button>
-                    </div>
-
-                    <div className="d-flex  px-3 py-1 rounded-pill quantity " style={{ backgroundColor: "#FFFF8A" }}>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={deleter4}>-</button>
-                      <span className="mx-2 fw-bold">{value4}</span>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={updater4}>+</button>
-                    </div>
-
-                    <div className="d-flex px-3 py-1 rounded-pill quantity  " style={{ backgroundColor: "#FFFF8A" }}>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={deleter5}>-</button>
-                      <span className="mx-2 fw-bold">{value5}</span>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={updater5}>+</button>
-                    </div>
-
-                    <div className="d-flex   px-3 py-1 rounded-pill quantity " style={{ backgroundColor: "#FFFF8A" }}>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={deleter6}>-</button>
-                      <span className="mx-2 fw-bold">{value6}</span>
-                      <button className="btn btn-light btn-sm rounded-circle" onClick={update6}>+</button>
-                    </div>
-
-
-
-
-
-                  </div>
+                    {kidsItem.map((item,index)=>(
+                      <div key={item._id}   className="d-flex px-3 py-1 rounded-pill"
+        style={{backgroundColor:"#FFFF8A"}}>
+  <button className="btn btn-light btn-sm rounded-circle" onClick={()=>deletes(index)}>-</button>
+                      <span className="mx-2 fw-bold">{item.quantity}</span>
+                      <button className="btn btn-light btn-sm rounded-circle" onClick={()=>updates(index)}>+</button>
                 </div>
-              </div>
+                    ))}
+                 
+</div>
+   </div>   
+          
+       </div>   
 
 
 
-
-            </div>
-
+</div>
 
 
           </div>
@@ -399,22 +296,8 @@ function Price4() {
 
         </div>
         <div className='d-flex gap-5 justify-content-center '>
-          <button className='btn btn-success but' onClick={() => navigate('/selected', {
-            state: {
-              men: men,
-              women: women,
-              kids: kids1
-            }
-          })}> proceed </button>
-          <button className='btn btn-danger but' onClick={() => {
-            reseting(); navigate('/price4', {
-              state: {
-                men: men,
-                women: women,
-                kids: [0, 0, 0, 0, 0, 0]
-              }
-            })
-          }}>Reset</button>
+          <button className='btn btn-success but' onClick={() => navigate('/selected')}> proceed </button>
+          <button className='btn btn-danger but' onClick={() => { navigate('/price4')}}>Reset</button>
         </div>
       </div>
 

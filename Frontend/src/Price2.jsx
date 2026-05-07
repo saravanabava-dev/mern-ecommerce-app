@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react'
 import { useState,useRef,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -5,39 +6,12 @@ import { useLocation } from 'react-router-dom';
 function Price2() {
 
   const location=useLocation();
-  const men=location.state?.men||[0,0,0,0,0,0]
-  const women=location.state?.women ||[0,0,0,0,0,0]
-  const kids=location.state?.kids ||[0,0,0,0,0,0]
+  
 
 
 
 
-  useEffect(() => {
-  const w = location.state?.women || [0,0,0,0,0,0];
-
-  setVaalue1(w[0]);
-  setVaalue2(w[1]);
-  setVaalue3(w[2]);
-  setVaalue4(w[3]);
-  setVaalue5(w[4]);
-  setVaalue6(w[5]);
-
-}, [location.key]);
-  /* useEffect(()=>{
-    
-    if(women){
-      setVaalue1(women[0])
-           setVaalue2(women[1])
-
-                setVaalue3(women[2])
-                     setVaalue4(women[3])
-                          setVaalue5(women[4])
-                               setVaalue6(women[5])
-
-      
-
-    }
-  },[women]) */
+ 
    const dropdownRef=useRef();
     useEffect(() => {
     function handleClickOutside(e) {
@@ -53,83 +27,59 @@ function Price2() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-      const[value1,setVaalue1]=useState(women[0]||0);
-       const[value2,setVaalue2]=useState( women[1]||0);
-     const[value3,setVaalue3]=useState(women[2] ||0);
-     const[value4,setVaalue4]=useState(women[3]||0);
-     const[value5,setVaalue5]=useState(women[4]||0);
     
-        const[value6,setVaalue6]=useState(women[5]||0);
-       const women2=[value1,value2,value3,value4,value5,value6]
+    
+      
     const navigate=useNavigate();
     
         const[user,setUser]=useState(
           JSON.parse(localStorage.getItem("user"))
         )
   
-    const update1=()=>{
-      
-      setVaalue1(value1+1);
-    }
-    const deleter1=()=>{
-      if(0<value1){
-    setVaalue1(value1-1)
+    const updates=async (index)=>{
+      const newData=[...WomenItems];
+      newData[index].quantity+=1
+      setWomenItems(newData);
+      try{
+        axios.put(`http://localhost:5174/men_items/${newData[index]._id}`,{
+          quantity:newData[index].quantity,
+        })
+      }
+      catch(err){
+        console.log(err.message);
       }
     }
-    const updater2=()=>{
-      
-      setVaalue2(value2+1);
-    }
-    const deleter2=()=>{
-      if(0<value2){
-    setVaalue2(value2-1)
+    const deletes=async(index)=>{
+      const newData=[...WomenItems];
+      if(newData[index].quantity>0){
+        newData[index].quantity-=1;
+        setWomenItems(newData);
       }
-    }
-    const updater3=()=>{
-      
-      setVaalue3(value3+1);
-    }
-    const deleter3=()=>{
-      if(0<value3){
-    setVaalue3(value3-1)
+      try{
+        axios.put(`http://localhost:5174/men_items/${newData[index]._id}`,{
+          quantity:newData[index].quantity,
+        })
       }
-    }
-    const updater4=()=>{
-      
-      setVaalue4(value4+1);
-    }
-    const deleter4=()=>{
-      if(0<value4){
-    setVaalue4(value4-1)
+      catch(err){
+        console.log(err.message);
       }
     }
     
-    const updater5=()=>{
-      
-      setVaalue5(value5+1);
-    }
-    
-    const deleter5=()=>{
-      if(0<value5){
-    setVaalue5(value5-1)
-      }
-    }
-    
-    const update6=()=>{
-      
-      setVaalue6(value6+1);
-    }
-    
-    const deleter6=()=>{
-      if(0<value6){
-    setVaalue6(value6-1)
-      }
-    }
         
           const [open, setOpen] = useState(false);
         
           const toggleDropdown = () => setOpen(!open);
-      
+          const [WomenItems,setWomenItems]=useState([]);
+
+          useEffect(()=>{
+axios.get("http://localhost:5174/men_items").then(res=>{
+  const women=res.data.filter(i=>i.category==="Women");
+      setWomenItems(women);  
+
+})
+ 
+},[WomenItems])
+
   return (
     <div className='ee'>
 
@@ -140,7 +90,7 @@ function Price2() {
       <div className="ms-auto">
         <a className="me-4 nav-link d-inline" href="/">Home</a>
         <a className="nav-link me-4 d-inline " href="/ser" >Services</a>
-        <a className="me-4 nav-link d-inline" href="/about">About</a>
+        <a className="me-4 nav-link d-inline" href="/abouts">About</a>
 {user?(
 <div ref={dropdownRef} style={{ position: "relative", display: "inline-block" }}>
 
@@ -298,23 +248,10 @@ function Price2() {
     
     <div className='d-flex flex-column  mt-5 ccc ' >
    <div className='d-flex gap-5 p-3 py-4 mt-2'>
-        <h3 className='ms-4 fw-semibold he' onClick={()=>navigate('/price',{
-          state:{
-            men:men,
-            women:women2,
-            kids:kids
-           
-          }
-        })}>Men</h3>
+        <h3 className='ms-4 fw-semibold he' onClick={()=>navigate('/price')}>Men</h3>
          <h3 className='ms-4  fw-semibold he1'>Women</h3>
 
-           <h3 className='ms-4 fw-semibold he ' onClick={()=>navigate('/price4',{
-           state:{
-           men:men,
-            women:women2,
-            kids:kids
-           }
-           })}>Kids</h3>
+           <h3 className='ms-4 fw-semibold he ' onClick={()=>navigate('/price4')}>Kids</h3>
 
    </div>
     
@@ -326,69 +263,41 @@ function Price2() {
   </div>
   <div className='d-flex'>
   <div className='d-flex flex-column gap-4 mt-4 ms-1'>
-
-        <h5 className='ms-4 fw-semibold me-4'>Saree</h5>
-                <h5 className='ms-4 fw-semibold '>Froks</h5>
-                <h5 className='ms-4 fw-semibold '>Rampers</h5>
-                         <h5 className='ms-4 fw-semibold '>T-shirt Dresses </h5>
-                 <h5 className='ms-4 fw-semibold '>Cocktail dress </h5>
-                  <h5 className='ms-4 fw-semibold '>Shirt and pant</h5>
-                  
-
-  </div>
-   <div className=' d-flex flex-column gap-4 mt-4'  style={{marginLeft:"185px"}}>  
-
-        <h5 className='ms-4 fw-semibold me-4'>$30</h5>
-                <h5 className='ms-4 fw-semibold '>$10</h5>
-                <h5 className='ms-4 fw-semibold '>$45</h5>
-                         <h5 className='ms-4 fw-semibold '>$15</h5>
-                 <h5 className='ms-4 fw-semibold '>$24</h5>
-                  <h5 className='ms-4 fw-semibold '>$50</h5>
-                  
-
-  </div>
-   <div className=' d-flex flex-column gap-3 mt-4  ' style={{marginLeft:"200px"}}>
-    <div className="d-flex  px-3 py-1 rounded-pill quantity " style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle" onClick={deleter1}>-</button>
-  <span className="mx-2 fw-bold">{value1}</span>
-  <button className="btn btn-light btn-sm rounded-circle" onClick={update1}>+</button>
-</div>
-
-<div className="d-flex px-3 py-1 rounded-pill quantity "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter2}>-</button>
-  <span className="mx-2 fw-bold">{value2}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={updater2}>+</button>
-</div>
-
-<div className="d-flex  px-3 py-1 rounded-pill quantity "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter3}>-</button>
-  <span className="mx-2 fw-bold">{value3}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={updater3}>+</button>
-</div>
-
-<div className="d-flex  px-3 py-1 rounded-pill quantity "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter4}>-</button>
-  <span className="mx-2 fw-bold">{value4}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={updater4}>+</button>
-</div>
-
-<div className="d-flex px-3 py-1 rounded-pill quantity "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter5}>-</button>
-  <span className="mx-2 fw-bold">{value5}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={updater5}>+</button>
-</div>
-
-<div className="d-flex   px-3 py-1 rounded-pill quantity "  style={{backgroundColor:"#FFFF8A"}}>
-  <button className="btn btn-light btn-sm rounded-circle"onClick={deleter6}>-</button>
-  <span className="mx-2 fw-bold">{value6}</span>
-  <button className="btn btn-light btn-sm rounded-circle"  onClick={update6}>+</button>
-</div>
-
-    
+{WomenItems.map((item)=>(
+  <h5 key={item._id} className='ms-4 fw-semibold me-4'>{item.name}</h5>
+))}
         
                   
 
   </div>
+   <div className=' d-flex flex-column gap-4 mt-4'  style={{marginLeft:"185px"}}>  
+{ WomenItems.map((item)=>(
+ <h5 key={item._id} className='ms-4 fw-semibold me-4'>{item.price}</h5>
+               
+))
+       
+                  
+}
+  </div>
+   <div className='d-flex flex-column gap-3 mt-4' style={{marginLeft:"190px"}}>
+    {WomenItems.map((item, index) => (
+      <div 
+        key={item._id}
+        className="d-flex px-3 py-1 rounded-pill"
+        style={{backgroundColor:"#FFFF8A"}}
+      >
+        <button className="btn btn-light btn-sm rounded-circle" onClick={()=>deletes(index)}>-</button>
+        <span className="mx-2 fw-bold">{item.quantity || 0}</span>
+        <button className="btn btn-light btn-sm rounded-circle" onClick={()=>updates(index)}>+</button>
+      </div>
+    ))}
+  </div>
+   
+    
+        
+                  
+
+  
   </div>
 </div>
    
@@ -405,18 +314,8 @@ function Price2() {
 
     </div>
     <div  className='d-flex gap-5 justify-content-center '>
-    <button className='btn btn-success but' onClick={()=>navigate('/selected',{
-      state:{
-        men:men,
-        women:women2,
-        kids:kids
-      }
-    })}> proceed </button>
-    <button className='btn btn-danger but' onClick={()=>navigate('/price2',{state:{
-      mem:men,
-      women:[0,0,0,0,0,0],
-      kids:kids
-    }})}> Reset</button>
+    <button className='btn btn-success but' onClick={()=>navigate('/selected')}> proceed </button>
+    <button className='btn btn-danger but' onClick={()=>navigate('/price2')}> Reset</button>
 </div>
     </div>
 
@@ -476,6 +375,6 @@ function Price2() {
     </footer>
     </div>
   )
-}
 
+}
 export default Price2

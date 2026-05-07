@@ -1,44 +1,42 @@
 import React from "react";
-
+import { useState,useEffect} from "react";
+import axios from "axios";
 function ServicesSection() {
+  const [Images,setImages]=useState([])
+  const ServiceImg=async()=>{
+    const res=await axios.get("http://localhost:5174/images");
+    setImages(res.data);
+
+  }
+   useEffect(() => {
+    ServiceImg();   
+  }, []);
   return (
+    
     <div className="container py-5" id="services">
       <h2 className="text-center fw-bold mb-5">Our Expert Services</h2>
 
       <div className="row ">
-        <div className="col-md-4 mb-4 h-100 " >
-          <div className="card sss ">
-            <img src='./OIP.jpg' className="card-img-top service-img" alt="Steam" />
-            <div className="card-body">
-              <h5>Steam Iron</h5>
-              <p>Get perfectly pressed clothes every time.</p>
-            </div>
-          </div>
-        </div>
+        {Images.map((image)=>{
+  let ime=`http://localhost:5174/${image.Image}`
+  return(
+  <div className='col-md-4  col-12 g-4'>
+<div className='card  sss'>
 
-        <div className="col-md-4 mb-4 h-100 ">
-          <div className="card  sss"> 
-            <img src="./folds.jpg" className="card-img-top service-img" alt="Wash" />
-            <div className="card-body">
-              <h5>Wash & Iron</h5>
-              <p>Freshly washed and perfectly ironed clothes.</p>
-            </div>
-          </div>
-        </div>
+  <img className='card-img-top ' src={ime} alt='str' style={{ height: "250px", objectFit: "cover" }}/>
+  <div className='card-body'>
+    <h5 className='text-center fw-bold'>{image.name}</h5>
+  </div>
+</div>
+</div>
 
-        <div className="col-md-4 mb-4 h-100 ss">
-          <div className="card  sss">
-        <img src='./wash.jpg'  className="card-img-top service-img" alt="Fold" />
-            <div className="card-body">
-              <h5>Wash & Fold</h5>
-              <p>Clean, soft and folded laundry.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  )
+        }
+  )
+}
+</div>
+</div>
   );
 }
 
 export default ServicesSection;
-

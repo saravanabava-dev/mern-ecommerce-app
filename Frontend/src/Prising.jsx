@@ -93,7 +93,7 @@ const deletes= async (index)=>{
       <div className="ms-auto">
         <a className="me-4 nav-link d-inline" href="/">Home</a>
         <a className="nav-link me-4 d-inline " href="/ser" >Services</a>
-        <a className="me-4 nav-link d-inline" href="/about">About</a>
+        <a className="me-4 nav-link d-inline" href="/abouts">About</a>
 {user?(
 <div ref={dropdownRef} style={{ position: "relative", display: "inline-block" }}>
 
@@ -251,23 +251,9 @@ const deletes= async (index)=>{
     <div className='d-flex flex-column  mt-5 ccc ' >
    <div className='d-flex gap-5 p-3 py-4 mt-2'>
         <h3 className='ms-4 fw-semibold he1 ' >Men</h3>
-         <h3 className='ms-4  fw-semibold he' onClick={()=>navigate('/price2',
-         {state:
-          {men:men1,
-            women:women,
-            kids:kids
-         }}) } >Women</h3>
+         <h3 className='ms-4  fw-semibold he' onClick={()=>navigate('/price2') } >Women</h3>
 
-           <h3 className='ms-4 fw-semibold he ' onClick={()=>navigate('/price4',
-            {
-              state:{
-                men:men1,
-            women:women,
-            kids:kids
-              
-              }
-            }
-           )}>Kids</h3>
+           <h3 className='ms-4 fw-semibold he ' onClick={()=>navigate('/price4'  )}>Kids</h3>
            
    </div>
     
@@ -299,7 +285,7 @@ const deletes= async (index)=>{
   </div>
 
 
-  <div className='d-flex flex-column gap-3 mt-4' style={{marginLeft:"205px"}}>
+  <div className='d-flex flex-column gap-3 mt-4' style={{marginLeft:"270px"}}>
     {items.map((item, index) => (
       <div 
         key={item._id}
@@ -326,20 +312,8 @@ const deletes= async (index)=>{
 
     </div>
     <div  className='d-flex gap-5 justify-content-center '>
-    <button className='btn btn-success but 'onClick={()=>navigate('/selected',{
-      state:{
-        men:men1,
-        women:women,
-        kids:kids
-      }
-    })}> proceed </button>
-    <button className='btn btn-danger but' onClick={()=>navigate('/price',{
-      state:{
-        men:[0,0,0,0,0,0],
-        women:women,
-        kids:kids
-      }
-    })}>Reset</button>
+    <button className='btn btn-success but 'onClick={()=>navigate('/selected')}> proceed </button>
+    <button className='btn btn-danger but' onClick={()=>navigate('/price')}>Reset</button>
 </div>
     </div>
   </div>
