@@ -28,7 +28,7 @@ A full stack MERN application for online laundry and ironing service booking. Us
 * Vite
 * React Router DOM
 * Axios
-* Tailwind CSS
+* Bootstrap
 * React Toastify
 * React Leaflet
 * Recharts
