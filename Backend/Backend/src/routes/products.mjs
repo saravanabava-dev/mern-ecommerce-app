@@ -2,7 +2,6 @@ import {Router} from 'express'
 import { products } from '../util/contains.mjs';
 
 import { Delivery } from '../Mongoose/Schema/deliver_details.mjs';
-import Items from '../Mongoose/Schema/Price_details.mjs';
 const routers=Router();
 
  routers.get('/api',(req,res)=>{
@@ -62,28 +61,7 @@ catch(err){
 })
 
 
-routers.get('/men_items', async (req,res)=>{
-const men_items=await Items.find()
-console.log("saaa")
-console.log(men_items)
-res.send(men_items);
-})
 
-
-routers.put('/men_items/:id', async (req, res) => {
-  try {
-    const { quantity } = req.body;
-    const updatedItem = await Items.findByIdAndUpdate(
-      req.params.id,
-      { quantity },
-      { new: true } 
-    );
-    res.status(200).json(updatedItem);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error updating quantity" });
-  }
-});
 
 
 export default routers
