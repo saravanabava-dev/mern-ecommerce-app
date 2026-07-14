@@ -1,6 +1,6 @@
 
 import NavbarSection from './NavbarSection';
-import HeroSection from './Herosection';
+import HeroSection from './HeroSection';
 import PromoSection from './PromoSection';
 import ServicesSection from './ServicesSection';
 import TestimonialsSection from './TestonimialSection';

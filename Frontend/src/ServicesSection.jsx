@@ -4,7 +4,9 @@ import axios from "axios";
 function ServicesSection() {
   const [Images,setImages]=useState([])
   const ServiceImg=async()=>{
-    const res=await axios.get("http://localhost:5174/images");
+
+
+    const res=axios.get(`${import.meta.env.VITE_API_URL}/images`)
     setImages(res.data);
 
   }
