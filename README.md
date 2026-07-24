@@ -7,7 +7,7 @@ A full stack MERN application for online laundry and ironing service booking. Us
 ## 🚀 Features
 
 * User authentication and authorization
-* Google OAuth login support
+* Google OAuth login suppor
 * Laundry and ironing service booking
 * Product and service management
 * Order management system
